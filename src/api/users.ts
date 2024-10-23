@@ -19,23 +19,33 @@ export const useGetUsers = () => {
 }
 
 // I don't cache user to refetch everytime time that we to this query
-export const useGetUserById = (userId: number) => {
+export const useGetUserById = (userId: number | null | undefined) => {
   return useQuery(
-    USER_KEY,
+    [USER_KEY, userId],
     () => api.get(`/${USER_KEY}/${userId}`),
     {
+      enabled: Boolean(userId),
       select: (result: AxiosResponse) => {
-        return result.data;
+        return {
+          id: result.data.id,
+          fullName: result.data.full_name,
+          email: result.data.email
+        };
       }
-    }
+    },
   );
+}
+
+interface IAddUserProp {
+  fullName: string;
+  email: string;
+  password: string;
 }
 
 export const useAddUser = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(() => api.post(`/${USERS_KEY}`,
-    { fullName: "Ruben", email: "eu13@gmail.com", password: "123" }
+  return useMutation((user: IAddUserProp) => api.post(`/${USERS_KEY}`,user
   ),
     {
       onSuccess: (result) => {
@@ -49,11 +59,17 @@ export const useAddUser = () => {
     });
 }
 
+interface IUpdateUserProp {
+  id: string;
+  fullName: string;
+  email: string;
+}
+
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
-  return useMutation((userId: number) => api.put(`/${USER_KEY}/${userId}/edit`,
-    { fullName: "NEW NAME", email: "new@gmail.com" }
+  return useMutation((user: IUpdateUserProp) => api.put(`/${USER_KEY}/${user.id}/edit`,
+    { fullName: user.fullName, email: user.email }
   ),
     {
       onSuccess: (result) => {
