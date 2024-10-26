@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import {
-  useGetUsers
-} from "@/api";
+import { useGetUsers } from "@/api";
 import DeleteUserDialog from "@/components/DeleteUserDialog.vue";
-import UserDialog from "@/components/UserDialog.vue";
+import UpInsertUserDialog from "@/components/UpInsertUserDialog.vue";
 import type { IUser } from "@/models";
 import { ORDERS_PATH } from "@/router";
 import type { DataTableRowClickEvent } from "primevue/datatable";
@@ -11,10 +9,6 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const { data: users, isLoading, error } = useGetUsers();
-// const { mutate } = useAddUser()
-// const { data: user } = useGetUserById(16);
-// const { mutate: updateUser } = useUpdateUser();
-// const { mutate: deleteUser } = useDeleteUser();
 const router = useRouter();
 
 const showCreateDialog = ref<boolean>(false);
@@ -47,13 +41,13 @@ const handleCloseDeleteDialog = () => {
   selectedUserId.value = null;
 };
 
-const handleCloseUserDialog = () => {
+const handleCloseUpInserUserDialog = () => {
   showCreateDialog.value = false;
+  selectedUserId.value = null;
 };
 </script>
 
 <template>
-  {{ selectedUserId }}
   <Button label="Add User" @click="handleAddUser" />
 
   <DataTable :value="users" selectionMode="single" @row-click="onRowSelect">
@@ -61,19 +55,19 @@ const handleCloseUserDialog = () => {
     <Column field="email" header="Email"></Column>
     <Column field="createdAt" header="Created At"></Column>
     <Column field="updatedAt" header="Updated At"></Column>
-    <Column class="w-24 !text-end">
+    <Column class="w-5 !text-end">
       <template #body="{ data }">
         <Button
-          icon="pi pi-search"
+          icon="pi pi-user-edit"
           @click="(event: MouseEvent) => onEditRow(event, data.id)"
           rounded
         ></Button>
       </template>
     </Column>
-    <Column class="w-24 !text-end">
+    <Column class="w-5 !text-end">
       <template #body="{ data }">
         <Button
-          icon="pi pi-search"
+          icon="pi pi-times"
           @click="(event: MouseEvent) => onDeleteRow(event, data.id)"
           rounded
         ></Button>
@@ -81,17 +75,17 @@ const handleCloseUserDialog = () => {
     </Column>
   </DataTable>
 
-  <UserDialog
+  <UpInsertUserDialog
     v-if="showCreateDialog"
     :isOpen="showCreateDialog"
     :userId="selectedUserId"
-    @close-user-dialog="handleCloseUserDialog"
+    @on-close="handleCloseUpInserUserDialog"
   />
-
+  
   <DeleteUserDialog
     :isOpen="showDeleteDialog"
     :userId="selectedUserId"
-    @close-delete-dialog="handleCloseDeleteDialog"
+    @on-close="handleCloseDeleteDialog"
   />
 </template>
 

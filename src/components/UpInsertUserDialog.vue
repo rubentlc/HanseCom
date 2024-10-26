@@ -8,9 +8,7 @@ const { isOpen, userId } = defineProps<{
   userId?: number | null | undefined;
 }>();
 
-console.log("get, userId", userId);
-
-const emit = defineEmits(["close-user-dialog"]);
+const emit = defineEmits(["on-close"]);
 
 const userNameRef = ref(null);
 const userEmailRef = ref(null);
@@ -61,7 +59,7 @@ const handleCloseDialog = () => {
   userNameRef.value = null;
   userEmailRef.value = null;
   userPasswordRef.value = null;
-  emit("close-user-dialog");
+  emit("on-close");
 };
 
 watch([successCreatingUser, successUpdatingUser], () => {

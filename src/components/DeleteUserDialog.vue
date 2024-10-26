@@ -9,7 +9,7 @@ const { isOpen, userId } = defineProps<{
   userId: number | null;
 }>();
 
-const emit = defineEmits(["close-delete-dialog"]);
+const emit = defineEmits(["on-close"]);
 
 const confirm = useConfirm();
 const toast = useToast();
@@ -20,15 +20,15 @@ watch(
   () => isOpen,
   () => {
     if (!isOpen) {
+      emit("on-close");
       confirm.close();
       return;
     }
 
     confirm.require({
       modal: true,
-      message: "teste",
-      header: "Danger Zone",
-      icon: "pi pi-info-circle",
+      message: "Are you sure you want to delete the selected user?",
+      header: "Delete user",
       rejectLabel: "Cancel",
       rejectProps: {
         label: "Cancel",
@@ -40,12 +40,13 @@ watch(
         severity: "danger",
       },
       accept: () => {
+        emit("on-close");
         if (userId) {
           deleteUser(userId);
         }
       },
-      onHide: () => {
-        emit("close-delete-dialog");
+      reject: () => {
+        emit("on-close");
       },
     });
   }
@@ -64,7 +65,6 @@ watch(isSuccess, () => {
 </script>
 
 <template>
-  {{ isSuccess }}
   <Toast />
   <ConfirmDialog>
     <template #message="slotProps">
