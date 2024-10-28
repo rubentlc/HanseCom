@@ -13,11 +13,11 @@ import PrimeVue from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
 import ConfirmDialog from 'primevue/confirmdialog';
 import DataTable from 'primevue/datatable';
+import DatePicker from 'primevue/datepicker';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
-
 
 const app = createApp(App)
 app.use(router);
@@ -35,6 +35,7 @@ app.component('Dialog', Dialog);
 app.component('InputText', InputText);
 app.component('ConfirmDialog', ConfirmDialog);
 app.component('Toast', Toast);
+app.component('DatePicker', DatePicker);
 app.use(ConfirmationService);
 app.use(ToastService);
 

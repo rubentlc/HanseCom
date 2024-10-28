@@ -45,8 +45,7 @@ interface IAddUserProp {
 export const useAddUser = () => {
   const queryClient = useQueryClient();
 
-  return useMutation((user: IAddUserProp) => api.post(`/${USERS_KEY}`,user
-  ),
+  return useMutation((user: IAddUserProp) => api.post(`/${USERS_KEY}`, user),
     {
       onSuccess: (result) => {
         // I didn't get a way to type the old prop so I pus as any

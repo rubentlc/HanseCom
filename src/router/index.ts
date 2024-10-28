@@ -1,7 +1,7 @@
 import UsersListView from '@/views/UsersListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
-export const ORDERS_PATH = '/orders/:id'
+export const ORDERS_PATH = '/:id/orders'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

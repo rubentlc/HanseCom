@@ -14,18 +14,19 @@ export const useGetOrders = (userId: number) => {
       select: (result: AxiosResponse) => {
         return result.data;
       },
-      refetchOnMount: false,
+      refetchOnMount: true,
       refetchOnWindowFocus: false,
     }
   );
 }
 
 // I don't cache order to refetch everytime time that we to this query
-export const useGetOrderById = (orderId: number) => {
+export const useGetOrderById = (orderId: number | null | undefined) => {
   return useQuery(
     ORDER_KEY,
     () => api.get(`/${ORDER_KEY}/${orderId}`),
     {
+      enabled: Boolean(orderId),
       select: (result: AxiosResponse) => {
         return result.data;
       },
@@ -33,14 +34,18 @@ export const useGetOrderById = (orderId: number) => {
   );
 }
 
+interface IAddOrderProp {
+  user: string,
+  orderDate: string,
+  product: string
+}
+
 export const useAddOrder = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(() => api.post(`/${ORDERS_KEY}`,
-    { user: 1, orderDate: new Date().toISOString(), product: "consola" }
-  ),
+  return useMutation((order: IAddOrderProp) => api.post(`/${ORDERS_KEY}`, order),
     {
-      onSuccess: (result) => {
+      onSuccess: (result, variables) => {
         queryClient.setQueryData(ORDERS_KEY, (old: any) => {
           const _old = { ...old };
 
@@ -53,7 +58,7 @@ export const useAddOrder = () => {
             order_date: result.data.orderDate,
             product: result.data.product,
             updated_at: result.data.updatedAt,
-            user_id: result.data.userId,
+            user_id: Number(variables.user),
           }
 
           _old.data = [...old.data, newOrder]
