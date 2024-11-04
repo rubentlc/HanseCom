@@ -35,19 +35,18 @@ const createBtnEnabled = computed(() => {
 });
 
 const handleSubmitOrder = () => {
-  // if (orderId) {
-  //   updateOrder({
-  //     id: orderId,
-  //     fullName: userNameRef.value,
-  //     email: orderProductRef.value,
-  //   });
-  // } else {
-    addOrder({
+  const upInsertObj = {
       user: userId,
+      orderId: orderId,
       orderDate: orderDateRef.value,
       product: orderProductRef.value
-    });
-  // }
+    }
+
+  if (orderId) {
+    updateOrder(upInsertObj);
+  } else {
+    addOrder(upInsertObj);
+  }
 };
 
 const handleCloseDialog = () => {
@@ -71,8 +70,9 @@ watch([successCreatingOrder, successUpdatingOrder], () => {
 
 watch(orderData, () => {
   if (orderData) {
-    // userNameRef.value = orderData.value.fullName;
-    // orderProductRef.value = orderData.value.email;
+    const { order_date, product } = orderData.value;
+    orderDateRef.value = order_date;
+    orderProductRef.value = product;
   }
 });
 </script>

@@ -11,12 +11,12 @@ import { useRouter } from "vue-router";
 const { data: users, isLoading, error } = useGetUsers();
 const router = useRouter();
 
-const showCreateDialog = ref<boolean>(false);
+const showUpInsertDialog = ref<boolean>(false);
 const showDeleteDialog = ref<boolean>(false);
 const selectedUserId = ref<number | null>(null);
 
 const handleAddUser = () => {
-  showCreateDialog.value = true;
+  showUpInsertDialog.value = true;
 };
 
 const onRowSelect = (event: DataTableRowClickEvent) => {
@@ -33,7 +33,7 @@ const onDeleteRow = (event: MouseEvent, userId: number) => {
 const onEditRow = (event: MouseEvent, userId: number) => {
   event.stopPropagation();
   selectedUserId.value = userId;
-  showCreateDialog.value = true;
+  showUpInsertDialog.value = true;
 };
 
 const handleCloseDeleteDialog = () => {
@@ -42,7 +42,7 @@ const handleCloseDeleteDialog = () => {
 };
 
 const handleCloseUpInserUserDialog = () => {
-  showCreateDialog.value = false;
+  showUpInsertDialog.value = false;
   selectedUserId.value = null;
 };
 </script>
@@ -76,8 +76,8 @@ const handleCloseUpInserUserDialog = () => {
   </DataTable>
 
   <UpInsertUserDialog
-    v-if="showCreateDialog"
-    :isOpen="showCreateDialog"
+    v-if="showUpInsertDialog"
+    :isOpen="showUpInsertDialog"
     :userId="selectedUserId"
     @on-close="handleCloseUpInserUserDialog"
   />

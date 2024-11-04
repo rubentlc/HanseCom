@@ -15,7 +15,6 @@
   "dependencies": {
     "@primevue/auto-import-resolver": "^4.1.1",
     "@primevue/themes": "^4.1.0",
-    "@reduxjs/toolkit": "^2.3.0",
     "axios": "^1.7.7",
     "primeicons": "^7.0.0",
     "primevue": "^4.1.0",

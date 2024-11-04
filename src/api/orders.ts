@@ -34,8 +34,9 @@ export const useGetOrderById = (orderId: number | null | undefined) => {
   );
 }
 
-interface IAddOrderProp {
+interface IUpInsertOrder {
   user: string,
+  orderId?: string
   orderDate: string,
   product: string
 }
@@ -43,7 +44,7 @@ interface IAddOrderProp {
 export const useAddOrder = () => {
   const queryClient = useQueryClient();
 
-  return useMutation((order: IAddOrderProp) => api.post(`/${ORDERS_KEY}`, order),
+  return useMutation((order: IUpInsertOrder) => api.post(`/${ORDERS_KEY}`, order),
     {
       onSuccess: (result, variables) => {
         queryClient.setQueryData(ORDERS_KEY, (old: any) => {
@@ -68,11 +69,12 @@ export const useAddOrder = () => {
     });
 }
 
+
 export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
 
-  return useMutation((orderId: number) => api.put(`/${ORDER_KEY}/${orderId}/edit`,
-    { orderDate: new Date().toISOString(), product: "1" }
+  return useMutation((order: IUpInsertOrder) => api.put(`/${ORDER_KEY}/${order.orderId}/edit`,
+    { orderDate: order.orderDate, product: order.product }
   ),
     {
       onSuccess: (result) => {
@@ -85,7 +87,6 @@ export const useUpdateOrder = () => {
           if (objIndex === -1) {
             return;
           }
-
           // I need to do this because the modals are diferent
           const updatedObj = {
             ...oldOrders[objIndex],
@@ -93,8 +94,6 @@ export const useUpdateOrder = () => {
             product: newOrder.product,
             updated_at: newOrder.updatedAt,
           };
-
-          console.log(updatedObj, newOrder)
 
           _old.data = [
             ...oldOrders.slice(0, objIndex),

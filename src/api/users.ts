@@ -80,16 +80,7 @@ export const useUpdateUser = () => {
 
           if (objIndex === -1) {
             return;
-          }
-
-          // const updatedObj = {
-          //   ...oldUsers[objIndex],
-          //   order_date: newUser.orderDate,
-          //   product: newUser.product,
-          //   updated_at: newUser.updatedAt,
-          // };
-
-          
+          }          
 
           _old.data = [
             ...oldUsers.slice(0, objIndex),
